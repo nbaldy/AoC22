@@ -17,4 +17,4 @@ Get the top 3 elves and calories
 ### Thought process
 Just modify part 1 - it still works for part 1, but give it instead a buffer of 3 elves. Make this a priority queue such that the elf with the fewest always floats to the top so that we pop them first. 
 
-For a priority queue, use python heapq. I need to figure out how this sorts if I want to keep the elf number in there. Looks like I just make Elf a class and define _lt_.
+For a priority queue, use python heapq. I need to figure out how this sorts if I want to keep the elf number in there. Looks like I just make Elf a class and define `_lt_`.
