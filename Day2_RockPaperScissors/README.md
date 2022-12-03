@@ -2,7 +2,7 @@
 [Full description here](https://adventofcode.com/2022/day/2)
 
 ### Part 1
-Calculate the score for a rock paper scissors game if the strategy is followed. 
+Calculate the score for a rock paper scissors game if the strategy is followed.
 Scoring occurs as the following:
 Shape points (individual):
     - 1 point for playing Rock (X)
@@ -17,7 +17,7 @@ Win points (dependent on opponent):
 ### Thought process
 Diagram:
 | You  | Key | Elf | Key | Your Score + Comments |
-| ---  | --- | --- | --- | --------------------- | 
+| ---  | --- | --- | --- | --------------------- |
 |**X** | _R_ |**A**| _R_ |  4 (1 ind + 3 tie)
 |**X** | _R_ |**B**| _P_ |  1 (1 ind + 0 loss )
 |**X** | _R_ |**C**| _S_ |  7 (1 ind + 6 win)
@@ -36,3 +36,19 @@ Make score lookup table for win/lose
 - X means you need to lose
 - Y means you need to tie
 - Z means you need to win
+
+### Thought process
+This doesn't seem like a big/scalable enough problem to justify making a scoring equation. Be lazy, make a new key by sorting the table by win vs elf play
+
+Diagram:
+| Result |  Elf | Key | You |
+| ------ |  --- | --- | --- |
+| LOSS   | **A**| _R_ | _S_ |
+| LOSS   | **B**| _P_ | _R_ |
+| LOSS   | **C**| _S_ | _P_ |
+| TIE    | **A**| _R_ | _R_ |
+| TIE    | **B**| _P_ | _P_ |
+| TIE    | **C**| _S_ | _S_ |
+| WIN    | **A**| _R_ | _P_ |
+| WIN    | **B**| _P_ | _S_ |
+| WIN    | **C**| _S_ | _R_ |
