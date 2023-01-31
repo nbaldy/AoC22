@@ -36,8 +36,8 @@ def readStackLine(line: str, stacks: list) -> bool:
 
 # Return true if line is successfully read
 # Modifies stacks in-place
-def readMoveLine(line: str, stacks: list)->bool:
-    move_line_regex =  "move (\d*) from (\d*) to (\d*)"
+def readMoveLineOneByOne(line: str, stacks: list)->bool:
+    # move_line_regex =  "move (\d*) from (\d*) to (\d*)"
     match = re.search(move_line_regex, line)
     if not match:
         print(f"Invalid line: {line}")
@@ -61,7 +61,33 @@ def readMoveLine(line: str, stacks: list)->bool:
         stacks[col_to-1].append(stacks[col_from-1].pop())
     return True
 
-def readFinalTopCrates(filename: str)->str:
+def readMoveLineTogether(line: str, stacks: list)->bool:
+    # move_line_regex =  "move (\d*) from (\d*) to (\d*)"
+    match = re.search(move_line_regex, line)
+    if not match:
+        print(f"Invalid line: {line}")
+        return False
+
+    try:
+        num_to_move, col_from, col_to = [int(group) for group in match.groups()]
+    except ValueError:
+        print(f"Invalid line, not numeric moves: {line}")
+        return False
+
+    if min(col_from, col_to) < 0 or max(col_from, col_to) > len(stacks):
+        print(f"Invalid columns: {col_from}, {col_to}, there are {len(stacks)} columns")
+        return False
+    
+    if num_to_move > len(stacks[col_from-1]):
+        print(f"Invalid move: only {len(stacks[col_from-1])} items in column {col_from}")
+        return False
+    
+    stacks[col_to-1] += stacks[col_from-1][-num_to_move:]
+    del stacks[col_from-1][-num_to_move:]
+
+    return True
+
+def readFinalTopCrates(filename: str, moveParser)->str:
     try:
         file = open(filename, 'r')
     except FileNotFoundError:
@@ -84,7 +110,7 @@ def readFinalTopCrates(filename: str)->str:
         stack.reverse()
     print(stacks)
     while line:
-        if not readMoveLine(line, stacks):
+        if not moveParser(line, stacks):
             print("Error moving stacks")
             return ""
         print(line, stacks)
@@ -103,7 +129,8 @@ def main(args: list):
         print(f"\tRun with 'python supply_stacks.py <inputfile>'")
         return
 
-    print(f"Advent of code answer part 1: {readFinalTopCrates(args[0])}")
+    print(f"Advent of code answer part 1: {readFinalTopCrates(args[0], readMoveLineOneByOne)}")
+    print(f"Advent of code answer part 2: {readFinalTopCrates(args[0], readMoveLineTogether)}")
 
 if __name__ == '__main__':
     main(sys.argv[1:])
